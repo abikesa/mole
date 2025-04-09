@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-plant_flicks.py 🌱
+plant_flicks_frac.py 🌱
 
 Performs the flick ritual:
 - Walks the Git-rooted directory tree starting from shill.
@@ -88,9 +88,12 @@ def plant_flicks(base_dir, percent=100):
                 continue
             all_targets.append(("file", os.path.join(root, name)))
 
-    random.shuffle(all_targets)
-    sample_size = int(len(all_targets) * percent / 100)
-    chosen_targets = all_targets[:sample_size]
+    if not all_targets:
+        print("⚠️ No flickable targets found.")
+        return
+
+    sample_size = max(1, int(len(all_targets) * percent / 100))
+    chosen_targets = random.sample(all_targets, sample_size)
 
     flicked = 0
     for kind, path in chosen_targets:
@@ -102,6 +105,7 @@ def plant_flicks(base_dir, percent=100):
 
             with open(flick_path, 'a') as f:
                 f.write(generate_graffiti())
+
             rel_path = os.path.relpath(flick_path, start=repo_root)
             git_commit(flick_path, f" {rel_path}", repo_root)
             print(f"✅ {rel_path}")
@@ -109,10 +113,10 @@ def plant_flicks(base_dir, percent=100):
         except Exception as e:
             print(f"❌ Flick failed: {path} – {e}")
 
-    print(f"\n🌿 Ritual complete: {flicked} of {len(all_targets)} targets flicked.")
+    print(f"\n🌿 Ritual complete: {flicked} of {len(all_targets)} potential targets flicked.")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="🌱 Perform flick ritual on a % of the tree")
+    parser = argparse.ArgumentParser(description="🌱 Perform flick ritual on a random % of the tree")
     parser.add_argument("--percent", type=int, default=100,
                         help="Random % of folders/files to flick (default: 100)")
     args = parser.parse_args()
