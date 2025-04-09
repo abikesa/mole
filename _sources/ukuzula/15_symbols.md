@@ -6,3 +6,4 @@ Our symbols compress epistemic states:
 - ✂️ = discernment
 - 🏝️ = legacy# flick 20250409213605-q84t
 # flick 20250409214211-ReTz
+# flick 20250409214627-nJO3
